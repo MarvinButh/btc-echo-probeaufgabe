@@ -1,0 +1,18 @@
+{
+  "name": "02_studio",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@portabletext/react": "^4.0.2",
+    "@sanity/types": "^4.6.0",
+    "@sanity/vision": "^4.6.0",
+    "sanity": "^4.6.0"
+  }
+}

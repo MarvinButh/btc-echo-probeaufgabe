@@ -1,0 +1,144 @@
+{
+  "info": {
+    "name": "BTC-ECHO Leads API",
+    "_postman_id": "b9f6f2d2-0000-4000-8000-000000000000",
+    "description": "Collection for testing the BTC-ECHO Leads API (local development)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Root",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/",
+          "host": ["{{baseUrl}}"],
+          "path": ["/"]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "var j = pm.response.json();",
+              "pm.test('Has ok true', function () { pm.expect(j.ok).to.eql(true); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Create Lead",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"test@example.com\",\n  \"name\": \"Test User\",\n  \"pageSlug\": \"home\"\n}"
+        },
+        "url": { "raw": "{{baseUrl}}/leads", "host": ["{{baseUrl}}"], "path": ["leads"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 201', function () { pm.response.to.have.status(201); });",
+              "var json = pm.response.json();",
+              "pm.test('Response has id', function () { pm.expect(json).to.have.property('id'); });",
+              "if (json && json.id) { pm.environment.set('lastLeadId', json.id); }"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "List Leads",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/leads", "host": ["{{baseUrl}}"], "path": ["leads"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('Response is array', function () { pm.expect(Array.isArray(pm.response.json())).to.be.true; });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Get Lead by ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/leads/{{lastLeadId}}", "host": ["{{baseUrl}}"], "path": ["leads", "{{lastLeadId}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "var j = pm.response.json();",
+              "pm.test('Has matching id', function () { pm.expect(j.id).to.eql(pm.environment.get('lastLeadId')); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Update Lead",
+      "request": {
+        "method": "PUT",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "body": { "mode": "raw", "raw": "{ \"name\": \"Updated Name\" }" },
+        "url": { "raw": "{{baseUrl}}/leads/{{lastLeadId}}", "host": ["{{baseUrl}}"], "path": ["leads", "{{lastLeadId}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+              "var j = pm.response.json();",
+              "pm.test('Name updated', function () { pm.expect(j.name).to.eql('Updated Name'); });"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Delete Lead",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/leads/{{lastLeadId}}", "host": ["{{baseUrl}}"], "path": ["leads", "{{lastLeadId}}"] }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Status is 204', function () { pm.response.to.have.status(204); });",
+              "pm.environment.unset('lastLeadId');"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -31,7 +31,7 @@ export default function HeroBlock({
         {imageUrl && (
           <div className="w-full rounded-lg overflow-hidden bg-white/5 border border-neutral-700 my-8">
             <div className="relative w-full h-56 md:h-96">
-              {/* <Image
+              <Image
                 src={imageUrl}
                 alt={alt ?? headline ?? 'Hero image'}
                 fill
@@ -39,7 +39,7 @@ export default function HeroBlock({
                 className="object-cover"
                 priority
                 unoptimized
-              /> */}
+              />
             </div>
           </div>
         )}

@@ -18,7 +18,7 @@ export const revalidate = 60 // ISR
 
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const data: any = await sanity.fetch(pageBySlug, { slug: params.slug })
+    const data: any = await sanity.fetch(pageBySlug, { slug: (await params).slug })
     if (!data) return {}
     return {
         title: data?.seo?.title ?? data?.title ?? undefined,
@@ -40,7 +40,7 @@ type PageData = {
 
 
 export default async function Page({ params }: { params: { slug: string } }) {
-    const data = (await sanity.fetch(pageBySlug, { slug: params.slug })) as PageData | null
+    const data = (await sanity.fetch(pageBySlug, { slug: (await params).slug })) as PageData | null
     if (!data) return notFound()
 
     const { title, hero, content, cta, faq, banner } = data
